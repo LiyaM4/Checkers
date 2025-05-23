@@ -13,6 +13,8 @@ class Config
         reload();
     }
 
+    // Функция reload() загружает настройки из файла settings.json,
+    // чтобы обновить конфигурацию без перезапуска программы.
     void reload()
     {
         std::ifstream fin(project_path + "settings.json");
@@ -20,6 +22,8 @@ class Config
         fin.close();
     }
 
+    // Оператор круглые скобки позволяет обращаться к объекту Config
+    // как к функции для получения значения настройки по имени раздела и параметра.
     auto operator()(const string &setting_dir, const string &setting_name) const
     {
         return config[setting_dir][setting_name];
