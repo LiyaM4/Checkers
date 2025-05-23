@@ -10,10 +10,10 @@ const int INF = 1e9;
 
 class Logic
 {
-  public:
-    Logic(Board *board, Config *config) : board(board), config(config)
+public:
+    Logic(Board* board, Config* config) : board(board), config(config)
     {
-        rand_eng = std::default_random_engine (
+        rand_eng = std::default_random_engine(
             !((*config)("Bot", "NoRandom")) ? unsigned(time(0)) : 0);
         scoring_mode = (*config)("Bot", "BotScoringType");
         optimization = (*config)("Bot", "Optimization");
@@ -48,7 +48,7 @@ private:
         return mtx;
     }
 
-    double calc_score(const vector<vector<POS_T>> &mtx, const bool first_bot_color) const
+    double calc_score(const vector<vector<POS_T>>& mtx, const bool first_bot_color) const
     {
         // color - who is max player
         double w = 0, wq = 0, b = 0, bq = 0;
@@ -85,7 +85,7 @@ private:
     }
 
     double find_first_best_turn(vector<vector<POS_T>> mtx, const bool color, const POS_T x, const POS_T y, size_t state,
-                                double alpha = -1)
+        double alpha = -1)
     {
         next_best_state.push_back(-1);
         next_move.emplace_back(-1, -1, -1, -1);
@@ -126,7 +126,7 @@ private:
     }
 
     double find_best_turns_rec(vector<vector<POS_T>> mtx, const bool color, const size_t depth, double alpha = -1,
-                               double beta = INF + 1, const POS_T x = -1, const POS_T y = -1)
+        double beta = INF + 1, const POS_T x = -1, const POS_T y = -1)
     {
         if (depth == Max_depth)
         {
@@ -176,18 +176,21 @@ private:
     }
 
 public:
+    // Поиск всех возможных ходов для игрока заданного цвета на всей доске
     void find_turns(const bool color)
     {
         find_turns(color, board->get_board());
     }
 
+    // Поиск всех возможных ходов для фигуры по координатам (x, y) на текущей доске
     void find_turns(const POS_T x, const POS_T y)
     {
         find_turns(x, y, board->get_board());
     }
 
 private:
-    void find_turns(const bool color, const vector<vector<POS_T>> &mtx)
+    // Поиск всех возможных ходов для игрока заданного цвета на переданной матрице доски
+    void find_turns(const bool color, const vector<vector<POS_T>>& mtx)
     {
         vector<move_pos> res_turns;
         bool have_beats_before = false;
@@ -215,7 +218,8 @@ private:
         have_beats = have_beats_before;
     }
 
-    void find_turns(const POS_T x, const POS_T y, const vector<vector<POS_T>> &mtx)
+    // Поиск всех возможных ходов для фигуры по координатам (x, y) на переданной матрице доски
+    void find_turns(const POS_T x, const POS_T y, const vector<vector<POS_T>>& mtx)
     {
         turns.clear();
         have_beats = false;
@@ -277,16 +281,16 @@ private:
         case 1:
         case 2:
             // check pieces
+        {
+            POS_T i = ((type % 2) ? x - 1 : x + 1);
+            for (POS_T j = y - 1; j <= y + 1; j += 2)
             {
-                POS_T i = ((type % 2) ? x - 1 : x + 1);
-                for (POS_T j = y - 1; j <= y + 1; j += 2)
-                {
-                    if (i < 0 || i > 7 || j < 0 || j > 7 || mtx[i][j])
-                        continue;
-                    turns.emplace_back(x, y, i, j);
-                }
-                break;
+                if (i < 0 || i > 7 || j < 0 || j > 7 || mtx[i][j])
+                    continue;
+                turns.emplace_back(x, y, i, j);
             }
+            break;
+        }
         default:
             // check queens
             for (POS_T i = -1; i <= 1; i += 2)
@@ -305,17 +309,17 @@ private:
         }
     }
 
-  public:
+public:
     vector<move_pos> turns;
     bool have_beats;
     int Max_depth;
 
-  private:
+private:
     default_random_engine rand_eng;
     string scoring_mode;
     string optimization;
     vector<move_pos> next_move;
     vector<int> next_best_state;
-    Board *board;
-    Config *config;
+    Board* board;
+    Config* config;
 };
