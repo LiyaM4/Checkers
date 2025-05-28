@@ -176,20 +176,20 @@ private:
     }
 
 public:
-    // Поиск всех возможных ходов для игрока заданного цвета на всей доске
+    // Search for all possible moves for the player of the given color on the whole board
     void find_turns(const bool color)
     {
         find_turns(color, board->get_board());
     }
 
-    // Поиск всех возможных ходов для фигуры по координатам (x, y) на текущей доске
+    // Search for all possible moves for the piece at coordinates (x, y) on the current board
     void find_turns(const POS_T x, const POS_T y)
     {
         find_turns(x, y, board->get_board());
     }
 
 private:
-    // Поиск всех возможных ходов для игрока заданного цвета на переданной матрице доски
+    // Search for all possible moves for the player of the given color on the provided board matrix
     void find_turns(const bool color, const vector<vector<POS_T>>& mtx)
     {
         vector<move_pos> res_turns;
@@ -218,7 +218,7 @@ private:
         have_beats = have_beats_before;
     }
 
-    // Поиск всех возможных ходов для фигуры по координатам (x, y) на переданной матрице доски
+    // Search for all possible moves for the piece at coordinates (x, y) on the provided board matrix
     void find_turns(const POS_T x, const POS_T y, const vector<vector<POS_T>>& mtx)
     {
         turns.clear();

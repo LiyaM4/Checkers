@@ -2,9 +2,9 @@
 
 enum class Response
 {
-    OK,      // Ход успешно выполнен, продолжаем игру
-    BACK,    // Откатить предыдущий ход
-    REPLAY,  // Повторить партию заново
-    QUIT,    // Выйти из игры
-    CELL     // Выбрана клетка на доске (используется для обработки ввода)
+    OK,      // Move successfully made, continue the game
+    BACK,    // Undo the previous move
+    REPLAY,  // Replay the game from the beginning
+    QUIT,    // Exit the game
+    CELL     // A cell on the board was selected (used for input handling)
 };

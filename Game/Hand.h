@@ -5,7 +5,7 @@
 #include "../Models/Response.h"
 #include "Board.h"
 
-//  ласс Hand отвечает за обработку пользовательского ввода (мышь, окно)
+// The Hand class is responsible for handling user input (mouse, window)
 class Hand
 {
 public:
@@ -13,7 +13,7 @@ public:
     {
     }
 
-    // ѕолучение выбранной пользователем клетки или команды (откат, выход, повтор)
+    // Get the cell selected by the user or a command (undo, exit, replay)
     tuple<Response, POS_T, POS_T> get_cell() const
     {
         SDL_Event windowEvent;
@@ -27,31 +27,31 @@ public:
                 switch (windowEvent.type)
                 {
                 case SDL_QUIT:
-                    // ѕользователь закрыл окно Ч выход из игры
+                    // User closed the window Ч exit the game
                     resp = Response::QUIT;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                    // ќбработка клика мыши: вычисление координат клетки
+                    // Handle mouse click: calculate cell coordinates
                     x = windowEvent.motion.x;
                     y = windowEvent.motion.y;
                     xc = int(y / (board->H / 10) - 1);
                     yc = int(x / (board->W / 10) - 1);
-                    // ≈сли клик по области "назад" Ч откат хода
+                    // If click on "back" area Ч undo move
                     if (xc == -1 && yc == -1 && board->history_mtx.size() > 1)
                     {
                         resp = Response::BACK;
                     }
-                    // ≈сли клик по области "повтор" Ч повторить партию
+                    // If click on "replay" area Ч replay the game
                     else if (xc == -1 && yc == 8)
                     {
                         resp = Response::REPLAY;
                     }
-                    // ≈сли клик по игровой клетке Ч вернуть координаты клетки
+                    // If click on a game cell Ч return cell coordinates
                     else if (xc >= 0 && xc < 8 && yc >= 0 && yc < 8)
                     {
                         resp = Response::CELL;
                     }
-                    //  лик вне допустимых областей Ч игнорируем
+                    // Click outside valid areas Ч ignore
                     else
                     {
                         xc = -1;
@@ -59,7 +59,7 @@ public:
                     }
                     break;
                 case SDL_WINDOWEVENT:
-                    // ќбработка изменени€ размера окна
+                    // Handle window resize event
                     if (windowEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                     {
                         board->reset_window_size();
@@ -70,11 +70,11 @@ public:
                     break;
             }
         }
-        // ¬озвращаем результат: тип действи€ и координаты клетки (если выбрана клетка)
+        // Return result: action type and cell coordinates (if a cell was selected)
         return { resp, xc, yc };
     }
 
-    // ќжидание действи€ пользовател€ (например, после окончани€ партии)
+    // Wait for user action (e.g., after the game ends)
     Response wait() const
     {
         SDL_Event windowEvent;
@@ -86,15 +86,15 @@ public:
                 switch (windowEvent.type)
                 {
                 case SDL_QUIT:
-                    // ѕользователь закрыл окно Ч выход из игры
+                    // User closed the window Ч exit the game
                     resp = Response::QUIT;
                     break;
                 case SDL_WINDOWEVENT_SIZE_CHANGED:
-                    // »зменение размера окна
+                    // Window resize event
                     board->reset_window_size();
                     break;
                 case SDL_MOUSEBUTTONDOWN: {
-                    //  лик мыши Ч провер€ем, был ли клик по области "повтор"
+                    // Mouse click Ч check if click was on "replay" area
                     int x = windowEvent.motion.x;
                     int y = windowEvent.motion.y;
                     int xc = int(y / (board->H / 10) - 1);
@@ -108,10 +108,10 @@ public:
                     break;
             }
         }
-        // ¬озвращаем тип действи€ пользовател€
+        // Return the type of user action
         return resp;
     }
 
 private:
-    Board* board; // ”казатель на игровое поле дл€ получени€ размеров и истории ходов
+    Board* board; // Pointer to the game board for getting sizes and move history
 };
